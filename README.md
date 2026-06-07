@@ -1,37 +1,123 @@
-README — Site da Cafeteria ☕
+# ☕ Aroma & Grão — Cafeteria API
 
-Este projeto consiste em um site simples para uma cafeteria, desenvolvido com foco em organização de código e trabalho colaborativo utilizando a metodologia GitFlow.
+Projeto integrador da disciplina **Gerenciamento de Configuração de Software** do curso de Análise e Desenvolvimento de Sistemas (ADS) — IFPE.
 
-📌 Objetivo
+## 👥 Equipe
 
-Criar um site responsivo para uma cafeteria fictícia, apresentando informações como:
+| Nome |
+|------|
+| Joseildo |
+| Eduardo |
+| Eliabe |
+| Erik |
+| Luiz Felipe |
 
-Página inicial
-Cardápio
-Sobre a cafeteria
-Contato
-Área de promoções
+---
 
-Além do desenvolvimento do site, o projeto teve como objetivo aplicar o modelo de versionamento GitFlow para organizar as etapas de produção.
+## 📌 Descrição do Projeto
 
-🛠️ Tecnologias Utilizadas
-HTML5
-CSS3
-JavaScript
-Git
-GitHub
-🌱 Aplicação do GitFlow
+Este projeto implementa uma **API REST** para gerenciamento de produtos de uma cafeteria fictícia chamada **Aroma & Grão**, com um pipeline CI/CD completo utilizando **GitHub Actions** e **Docker**.
 
-Durante o desenvolvimento, foi utilizada a estratégia GitFlow para separar e organizar as funcionalidades do projeto.
+---
 
-Estrutura de Branches
-main → versão final e estável do projeto
-develop → integração das funcionalidades em desenvolvimento
-feature/* → criação de novas funcionalidades
-release/* → preparação para lançamento
-hotfix/* → correção rápida de erros na versão principal
-Exemplos de Features Criadas
-feature/homepage
-feature/cardapio
-feature/contato
-feature/responsividade
+## 🛠️ Tecnologias Utilizadas
+
+- Python 3.12
+- FastAPI
+- Pytest
+- Docker
+- GitHub Actions
+- Docker Hub
+
+---
+
+## 🔁 Fluxo do Pipeline CI/CD
+
+```mermaid
+flowchart LR
+    A[Push / Pull Request] --> B[CI - Testes]
+    B --> C[Build - Verificar Imagem Docker]
+    C --> D[CD - Publicar no Docker Hub]
+```
+
+### Descrição dos Jobs
+
+| Job | Gatilho | O que faz |
+|-----|---------|-----------|
+| CI - Testes | Todo push e pull request | Instala dependências e executa os testes automatizados com pytest |
+| Build | Após CI passar | Constrói a imagem Docker para validar o Dockerfile |
+| CD | Push na branch master | Publica a imagem no Docker Hub |
+
+---
+
+## 🚀 Como executar localmente com Docker
+
+### Pré-requisitos
+- Docker instalado
+
+### Passos
+
+```bash
+# Clone o repositório
+git clone https://github.com/joseildo-ixel/Site_cafeteria.git
+cd Site_cafeteria
+
+# Suba a aplicação
+docker compose up
+```
+
+A API ficará disponível em: `http://localhost:8000`
+
+Documentação interativa: `http://localhost:8000/docs`
+
+---
+
+## 🧪 Como executar os testes
+
+```bash
+# Instale as dependências
+pip install -r api/requirements.txt
+
+# Execute os testes
+python -m pytest api/testes/ -v
+```
+
+---
+
+## 📡 Endpoints da API
+
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| GET | `/health` | Verificação de saúde da API |
+| POST | `/produtos` | Criar um produto |
+| GET | `/produtos/{id}` | Buscar um produto por ID |
+| PUT | `/produtos/{id}` | Atualizar um produto |
+| DELETE | `/produtos/{id}` | Remover um produto |
+
+---
+
+## 🐳 Imagem Docker
+
+A imagem é publicada automaticamente no Docker Hub a cada push na branch `master`:
+
+```bash
+docker pull joseildosystem/cafeteria-api:latest
+```
+
+---
+
+## 📸 Evidências de Execução
+
+> Adicione aqui prints do GitHub Actions com todos os jobs em verde.
+
+---
+
+## 🌱 Estratégia de Branches (GitFlow)
+
+| Branch | Finalidade |
+|--------|-----------|
+| `master` | Versão estável e final |
+| `develop` | Integração das funcionalidades |
+| `feature/*` | Novas funcionalidades |
+| `release/*` | Preparação para lançamento |
+|
