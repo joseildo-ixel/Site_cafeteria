@@ -1,8 +1,16 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 db = {}
 counter = {'id': 1}
@@ -17,6 +25,11 @@ class Produto(BaseModel):
 @app.get('/health')
 def health():
     return {'status': 'ok'}
+
+
+@app.get('/produtos')
+def listar_produtos():
+    return [{'id': pid, **dados} for pid, dados in db.items()]
 
 
 @app.post('/produtos', status_code=201)
