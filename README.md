@@ -1,8 +1,8 @@
-# ☕ Aroma & Grão — Cafeteria API
+﻿# Aroma & Grao - Cafeteria API
 
-Projeto integrador da disciplina **Gerenciamento de Configuração de Software** do curso de Análise e Desenvolvimento de Sistemas (ADS) — IFPE.
+Projeto integrador da disciplina **Gerenciamento de Configuracao de Software** do curso de Analise e Desenvolvimento de Sistemas (ADS) - IFPE.
 
-## 👥 Equipe
+## Equipe
 
 | Nome |
 |------|
@@ -14,13 +14,13 @@ Projeto integrador da disciplina **Gerenciamento de Configuração de Software**
 
 ---
 
-## 📌 Descrição do Projeto
+## Descricao do Projeto
 
-Este projeto implementa uma **API REST** para gerenciamento de produtos de uma cafeteria fictícia chamada **Aroma & Grão**, com um pipeline CI/CD completo utilizando **GitHub Actions** e **Docker**.
+Este projeto implementa uma **API REST** para gerenciamento de produtos de uma cafeteria ficticia chamada **Aroma & Grao**, com um pipeline CI/CD completo utilizando **GitHub Actions** e **Docker**.
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 - Python 3.12
 - FastAPI
@@ -31,7 +31,7 @@ Este projeto implementa uma **API REST** para gerenciamento de produtos de uma c
 
 ---
 
-## 🔁 Fluxo do Pipeline CI/CD
+## Fluxo do Pipeline CI/CD
 
 ```mermaid
 flowchart LR
@@ -40,42 +40,43 @@ flowchart LR
     C --> D[CD - Publicar no Docker Hub]
 ```
 
-### Descrição dos Jobs
+### Descricao dos Jobs
 
 | Job | Gatilho | O que faz |
 |-----|---------|-----------|
-| CI - Testes | Todo push e pull request | Instala dependências e executa os testes automatizados com pytest |
-| Build | Após CI passar | Constrói a imagem Docker para validar o Dockerfile |
+| CI - Testes | Todo push e pull request | Instala dependencias e executa os testes automatizados com pytest |
+| Build | Apos CI passar | Constroi a imagem Docker para validar o Dockerfile |
 | CD | Push na branch master | Publica a imagem no Docker Hub |
 
 ---
 
-## 🚀 Como executar localmente com Docker
+## Como executar localmente com Docker
 
-### Pré-requisitos
+### Pre-requisitos
+
 - Docker instalado
 
 ### Passos
 
 ```bash
-# Clone o repositório
+# Clone o repositorio
 git clone https://github.com/joseildo-ixel/Site_cafeteria.git
 cd Site_cafeteria
 
-# Suba a aplicação
+# Suba a aplicacao
 docker compose up
 ```
 
-A API ficará disponível em: `http://localhost:8000`
+A API ficara disponivel em: `http://localhost:8000`
 
-Documentação interativa: `http://localhost:8000/docs`
+Documentacao interativa: `http://localhost:8000/docs`
 
 ---
 
-## 🧪 Como executar os testes
+## Como executar os testes
 
 ```bash
-# Instale as dependências
+# Instale as dependencias
 pip install -r api/requirements.txt
 
 # Execute os testes
@@ -84,11 +85,12 @@ python -m pytest api/testes/ -v
 
 ---
 
-## 📡 Endpoints da API
+## Endpoints da API
 
-| Método | Rota | Descrição |
+| Metodo | Rota | Descricao |
 |--------|------|-----------|
-| GET | `/health` | Verificação de saúde da API |
+| GET | `/health` | Verificacao de saude da API |
+| GET | `/produtos` | Listar todos os produtos |
 | POST | `/produtos` | Criar um produto |
 | GET | `/produtos/{id}` | Buscar um produto por ID |
 | PUT | `/produtos/{id}` | Atualizar um produto |
@@ -96,9 +98,9 @@ python -m pytest api/testes/ -v
 
 ---
 
-## 🐳 Imagem Docker
+## Imagem Docker
 
-A imagem é publicada automaticamente no Docker Hub a cada push na branch `master`:
+A imagem e publicada automaticamente no Docker Hub a cada push na branch `master`:
 
 ```bash
 docker pull joseildosystem/cafeteria-api:latest
@@ -106,18 +108,18 @@ docker pull joseildosystem/cafeteria-api:latest
 
 ---
 
-## 📸 Evidências de Execução
+## Evidencias de Execucao
 
-> Adicione aqui prints do GitHub Actions com todos os jobs em verde.
+![Pipeline CI/CD](docs/pipeline.png)
 
 ---
 
-## 🌱 Estratégia de Branches (GitFlow)
+## Estrategia de Branches (GitFlow)
 
 | Branch | Finalidade |
 |--------|-----------|
-| `master` | Versão estável e final |
-| `develop` | Integração das funcionalidades |
+| `master` | Versao estavel e final |
+| `develop` | Integracao das funcionalidades |
 | `feature/*` | Novas funcionalidades |
-| `release/*` | Preparação para lançamento |
-|
+| `release/*` | Preparacao para lancamento |
+
