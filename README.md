@@ -1,0 +1,125 @@
+﻿ Aroma & Grao - Cafeteria API
+
+Projeto integrador da disciplina **Gerenciamento de Configuracao de Software** do curso de Analise e Desenvolvimento de Sistemas (ADS) - IFPE.
+
+## Equipe
+
+| Nome |
+|------|
+| Joseildo |
+| Eduardo |
+| Eliabe |
+| Erik |
+| Luiz Felipe |
+
+---
+
+## Descricao do Projeto
+
+Este projeto implementa uma **API REST** para gerenciamento de produtos de uma cafeteria ficticia chamada **Aroma & Grao**, com um pipeline CI/CD completo utilizando **GitHub Actions** e **Docker**.
+
+---
+
+## Tecnologias Utilizadas
+
+- Python 3.12
+- FastAPI
+- Pytest
+- Docker
+- GitHub Actions
+- Docker Hub
+
+---
+
+## Fluxo do Pipeline CI/CD
+
+```mermaid
+flowchart LR
+    A[Push / Pull Request] --> B[CI - Testes]
+    B --> C[Build - Verificar Imagem Docker]
+    C --> D[CD - Publicar no Docker Hub]
+```
+
+### Descricao dos Jobs
+
+| Job | Gatilho | O que faz |
+|-----|---------|-----------|
+| CI - Testes | Todo push e pull request | Instala dependencias e executa os testes automatizados com pytest |
+| Build | Apos CI passar | Constroi a imagem Docker para validar o Dockerfile |
+| CD | Push na branch master | Publica a imagem no Docker Hub |
+
+---
+
+## Como executar localmente com Docker
+
+### Pre-requisitos
+
+- Docker instalado
+
+### Passos
+
+```bash
+# Clone o repositorio
+git clone https://github.com/joseildo-ixel/Site_cafeteria.git
+cd Site_cafeteria
+
+# Suba a aplicacao
+docker compose up
+```
+
+A API ficara disponivel em: `http://localhost:8000`
+
+Documentacao interativa: `http://localhost:8000/docs`
+
+---
+
+## Como executar os testes
+
+```bash
+# Instale as dependencias
+pip install -r api/requirements.txt
+
+# Execute os testes
+python -m pytest api/testes/ -v
+```
+
+---
+
+## Endpoints da API
+
+| Metodo | Rota | Descricao |
+|--------|------|-----------|
+| GET | `/health` | Verificacao de saude da API |
+| GET | `/produtos` | Listar todos os produtos |
+| POST | `/produtos` | Criar um produto |
+| GET | `/produtos/{id}` | Buscar um produto por ID |
+| PUT | `/produtos/{id}` | Atualizar um produto |
+| DELETE | `/produtos/{id}` | Remover um produto |
+
+---
+
+## Imagem Docker
+
+A imagem e publicada automaticamente no Docker Hub a cada push na branch `master`:
+
+```bash
+docker pull joseildosystem/cafeteria-api:latest
+```
+
+---
+
+## Evidencias de Execucao
+
+![Pipeline CI/CD](docs/pipeline.png)
+
+---
+
+## Estrategia de Branches (GitFlow)
+
+| Branch | Finalidade |
+|--------|-----------|
+| `master` | Versao estavel e final |
+| `develop` | Integracao das funcionalidades |
+| `feature/*` | Novas funcionalidades |
+| `release/*` | Preparacao para lancamento |
+

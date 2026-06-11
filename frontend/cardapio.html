@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Aroma & Grão — Cardápio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #1a1208;
+      --bg2: #231a0e;
+      --card: #2d2010;
+      --card2: #3a2a14;
+      --accent: #c8894a;
+      --accent2: #e8a865;
+      --text: #f0e6d3;
+      --text2: #a89070;
+      --border: rgba(200,137,74,0.2);
+      --shadow: rgba(0,0,0,0.5);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* NAV */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 40px;
+      background: rgba(26,18,8,0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      color: var(--accent2);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo span { font-size: 1.6rem; }
+    .nav-tabs {
+      display: flex;
+      gap: 6px;
+      background: var(--card);
+      border-radius: 12px;
+      padding: 5px;
+    }
+    .nav-tab {
+      padding: 8px 20px;
+      border-radius: 9px;
+      border: none;
+      background: transparent;
+      color: var(--text2);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .nav-tab.active {
+      background: var(--accent);
+      color: #fff;
+      font-weight: 500;
+    }
+    .nav-tab:hover:not(.active) { color: var(--text); }
+    .cart-btn {
+      position: relative;
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 10px 20px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .cart-btn:hover { border-color: var(--accent); color: var(--accent2); }
+    .cart-count {
+      background: var(--accent);
+      color: #fff;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      font-size: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+    }
+
+    /* PÁGINAS */
+    .page { display: none; padding: 40px; max-width: 1100px; margin: 0 auto; }
+    .page.active { display: block; animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* CARDÁPIO */
+    .page-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      color: var(--accent2);
+      margin-bottom: 8px;
+    }
+    .page-sub { color: var(--text2); font-size: 0.95rem; margin-bottom: 32px; }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
+    }
+    .product-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .product-card:hover { transform: translateY(-3px); border-color: var(--accent); }
+    .product-emoji {
+      background: var(--card2);
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3.5rem;
+    }
+    .product-info { padding: 18px; }
+    .product-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      margin-bottom: 6px;
+    }
+    .product-desc { color: var(--text2); font-size: 0.85rem; margin-bottom: 14px; line-height: 1.5; }
+    .product-footer { display: flex; align-items: center; justify-content: space-between; }
+    .product-price { color: var(--accent2); font-size: 1.15rem; font-weight: 600; }
+    .add-btn {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 9px;
+      padding: 8px 16px;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .add-btn:hover { background: var(--accent2); }
+    .add-btn:active { transform: scale(0.96); }
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text2);
+    }
+    .empty-state .big { font-size: 3rem; margin-bottom: 12px; }
+
+    /* CARRINHO */
+    .cart-list { display: flex; flex-direction: column; gap: 14px; margin-bottom: 30px; }
+    .cart-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .cart-item-emoji { font-size: 2rem; }
+    .cart-item-info { flex: 1; }
+    .cart-item-name { font-weight: 500; margin-bottom: 3px; }
+    .cart-item-price { color: var(--accent2); font-size: 0.9rem; }
+    .qty-controls { display: flex; align-items: center; gap: 10px; }
+    .qty-btn {
+      background: var(--card2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.2s;
+    }
+    .qty-btn:hover { border-color: var(--accent); }
+    .qty-num { min-width: 20px; text-align: center; font-weight: 500; }
+    .remove-btn {
+      background: transparent;
+      border: 1px solid rgba(200,80,80,0.3);
+      color: #e07070;
+      border-radius: 8px;
+      padding: 6px 12px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      transition: all 0.2s;
+    }
+    .remove-btn:hover { background: rgba(200,80,80,0.15); }
+    .cart-summary {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+    }
+    .cart-total-line { display: flex; justify-content: space-between; margin-bottom: 10px; color: var(--text2); }
+    .cart-total-line.big { color: var(--text); font-size: 1.2rem; font-weight: 600; padding-top: 12px; border-top: 1px solid var(--border); margin-top: 8px; }
+    .checkout-btn {
+      width: 100%;
+      margin-top: 18px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 1rem;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .checkout-btn:hover { background: var(--accent2); }
+
+    /* ADMIN */
+    .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+    @media (max-width: 700px) { .admin-grid { grid-template-columns: 1fr; } }
+    .admin-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+    }
+    .admin-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      color: var(--accent2);
+      margin-bottom: 20px;
+    }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 0.85rem; color: var(--text2); margin-bottom: 6px; }
+    .form-group input, .form-group textarea {
+      width: 100%;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 14px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      transition: border-color 0.2s;
+      outline: none;
+    }
+    .form-group input:focus, .form-group textarea:focus { border-color: var(--accent); }
+    .form-group textarea { resize: vertical; min-height: 70px; }
+    .submit-btn {
+      width: 100%;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 4px;
+    }
+    .submit-btn:hover { background: var(--accent2); }
+    .admin-list { display: flex; flex-direction: column; gap: 10px; }
+    .admin-item {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .admin-item-info { flex: 1; }
+    .admin-item-name { font-weight: 500; font-size: 0.95rem; }
+    .admin-item-price { color: var(--accent); font-size: 0.85rem; }
+    .del-btn {
+      background: transparent;
+      border: 1px solid rgba(200,80,80,0.4);
+      color: #e07070;
+      border-radius: 8px;
+      padding: 6px 14px;
+      cursor: pointer;
+      font-size: 0.82rem;
+      transition: all 0.2s;
+    }
+    .del-btn:hover { background: rgba(200,80,80,0.2); }
+
+    /* TOAST */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: var(--card2);
+      border: 1px solid var(--accent);
+      color: var(--text);
+      padding: 14px 22px;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.3s;
+      z-index: 999;
+      pointer-events: none;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+
+    /* STATUS */
+    .status-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #4caf50;
+      display: inline-block;
+      margin-right: 6px;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+    .api-status { font-size: 0.8rem; color: var(--text2); display: flex; align-items: center; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="logo"><span>☕</span> Aroma & Grão</div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showPage('cardapio')">Cardápio</button>
+    <button class="nav-tab" onclick="showPage('carrinho')">Carrinho</button>
+    <button class="nav-tab" onclick="showPage('admin')">Admin</button>
+  </div>
+  <button class="cart-btn" onclick="showPage('carrinho')">
+    🛒 Carrinho <span class="cart-count" id="cartCount">0</span>
+  </button>
+</nav>
+
+<!-- CARDÁPIO -->
+<div class="page active" id="page-cardapio">
+  <h1 class="page-title">Nosso Cardápio</h1>
+  <p class="page-sub">Escolha seus favoritos e adicione ao carrinho</p>
+  <div class="products-grid" id="productGrid">
+    <div class="empty-state" style="grid-column:1/-1">
+      <div class="big">☕</div>
+      <p>Carregando produtos...</p>
+    </div>
+  </div>
+</div>
+
+<!-- CARRINHO -->
+<div class="page" id="page-carrinho">
+  <h1 class="page-title">Seu Carrinho</h1>
+  <p class="page-sub" id="cartSubtitle">Revise seus itens antes de finalizar</p>
+  <div id="cartContent"></div>
+</div>
+
+<!-- ADMIN -->
+<div class="page" id="page-admin">
+  <h1 class="page-title">Painel Admin</h1>
+  <p class="page-sub">Gerencie os produtos do cardápio</p>
+  <div class="admin-grid">
+    <div class="admin-card">
+      <h3>➕ Adicionar Produto</h3>
+      <div class="form-group">
+        <label>Nome do produto</label>
+        <input type="text" id="newName" placeholder="Ex: Cappuccino Especial"/>
+      </div>
+      <div class="form-group">
+        <label>Descrição</label>
+        <textarea id="newDesc" placeholder="Ex: Espresso com leite vaporizado e canela"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Preço (R$)</label>
+        <input type="number" id="newPrice" placeholder="12.90" step="0.01" min="0"/>
+      </div>
+      <button class="submit-btn" onclick="addProduct()">Adicionar ao Cardápio</button>
+    </div>
+    <div class="admin-card">
+      <h3>🗑️ Remover Produto</h3>
+      <div class="admin-list" id="adminList">
+        <p style="color:var(--text2);font-size:0.9rem">Carregando...</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const API = 'http://localhost:8000';
+let cart = {};
+let products = [];
+
+// Emojis por categoria
+const emojis = ['☕','🍵','🧁','🥐','🍰','🥤','🫖','🍫','🥨','🍩'];
+const getEmoji = (i) => emojis[i % emojis.length];
+
+async function fetchProducts() {
+  try {
+    // Tenta buscar da API
+    const r = await fetch(`${API}/produtos`);
+    if (r.ok) {
+      products = await r.json();
+    } else {
+      products = getDemoProducts();
+    }
+  } catch {
+    products = getDemoProducts();
+  }
+  renderCardapio();
+  renderAdminList();
+}
+
+function getDemoProducts() {
+  return [
+    { pid: 1, nome: 'Espresso Clássico', descricao: 'Café forte e encorpado, extraído na hora', preco: 6.90 },
+    { pid: 2, nome: 'Cappuccino', descricao: 'Espresso com leite vaporizado e espuma cremosa', preco: 10.50 },
+    { pid: 3, nome: 'Croissant de Manteiga', descricao: 'Folhado francês fresquinho, crocante por fora', preco: 8.90 },
+    { pid: 4, nome: 'Bolo de Cenoura', descricao: 'Fatia generosa com cobertura de chocolate', preco: 9.90 },
+  ];
+}
+
+function renderCardapio() {
+  const grid = document.getElementById('productGrid');
+  if (!products.length) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="big">🍃</div><p>Nenhum produto no cardápio ainda.<br>Adicione pelo painel Admin!</p></div>`;
+    return;
+  }
+  grid.innerHTML = products.map((p, i) => `
+    <div class="product-card">
+      <div class="product-emoji">${getEmoji(i)}</div>
+      <div class="product-info">
+        <div class="product-name">${p.nome}</div>
+        <div class="product-desc">${p.descricao || 'Produto especial da casa'}</div>
+        <div class="product-footer">
+          <span class="product-price">R$ ${Number(p.preco).toFixed(2)}</span>
+          <button class="add-btn" onclick="addToCart(${p.pid})">+ Carrinho</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderAdminList() {
+  const list = document.getElementById('adminList');
+  if (!products.length) {
+    list.innerHTML = `<p style="color:var(--text2);font-size:0.9rem">Nenhum produto cadastrado.</p>`;
+    return;
+  }
+  list.innerHTML = products.map(p => `
+    <div class="admin-item">
+      <div class="admin-item-info">
+        <div class="admin-item-name">${p.nome}</div>
+        <div class="admin-item-price">R$ ${Number(p.preco).toFixed(2)}</div>
+      </div>
+      <button class="del-btn" onclick="deleteProduct(${p.pid})">Remover</button>
+    </div>
+  `).join('');
+}
+
+function addToCart(pid) {
+  cart[pid] = (cart[pid] || 0) + 1;
+  updateCartCount();
+  const p = products.find(x => x.pid === pid);
+  showToast(`☕ ${p.nome} adicionado!`);
+}
+
+function updateCartCount() {
+  const total = Object.values(cart).reduce((a,b) => a+b, 0);
+  document.getElementById('cartCount').textContent = total;
+}
+
+function renderCart() {
+  const content = document.getElementById('cartContent');
+  const keys = Object.keys(cart).filter(k => cart[k] > 0);
+  if (!keys.length) {
+    content.innerHTML = `<div class="empty-state"><div class="big">🛒</div><p>Seu carrinho está vazio.<br>Explore o cardápio!</p></div>`;
+    return;
+  }
+  const items = keys.map(pid => {
+    const p = products.find(x => x.pid == pid);
+    if (!p) return '';
+    const subtotal = p.preco * cart[pid];
+    return `
+      <div class="cart-item">
+        <div class="cart-item-emoji">☕</div>
+        <div class="cart-item-info">
+          <div class="cart-item-name">${p.nome}</div>
+          <div class="cart-item-price">R$ ${Number(p.preco).toFixed(2)} cada</div>
+        </div>
+        <div class="qty-controls">
+          <button class="qty-btn" onclick="changeQty(${pid},-1)">−</button>
+          <span class="qty-num">${cart[pid]}</span>
+          <button class="qty-btn" onclick="changeQty(${pid},1)">+</button>
+        </div>
+        <span style="color:var(--accent2);font-weight:600;min-width:70px;text-align:right">R$ ${subtotal.toFixed(2)}</span>
+        <button class="remove-btn" onclick="removeFromCart(${pid})">✕</button>
+      </div>`;
+  }).join('');
+
+  const subtotal = keys.reduce((acc, pid) => {
+    const p = products.find(x => x.pid == pid);
+    return acc + (p ? p.preco * cart[pid] : 0);
+  }, 0);
+  const taxa = 2.00;
+  const total = subtotal + taxa;
+
+  content.innerHTML = `
+    <div class="cart-list">${items}</div>
+    <div class="cart-summary">
+      <div class="cart-total-line"><span>Subtotal</span><span>R$ ${subtotal.toFixed(2)}</span></div>
+      <div class="cart-total-line"><span>Taxa de serviço</span><span>R$ ${taxa.toFixed(2)}</span></div>
+      <div class="cart-total-line big"><span>Total</span><span>R$ ${total.toFixed(2)}</span></div>
+      <button class="checkout-btn" onclick="checkout()">☕ Finalizar Pedido</button>
+    </div>`;
+}
+
+function changeQty(pid, delta) {
+  cart[pid] = (cart[pid] || 0) + delta;
+  if (cart[pid] <= 0) delete cart[pid];
+  updateCartCount();
+  renderCart();
+}
+
+function removeFromCart(pid) {
+  delete cart[pid];
+  updateCartCount();
+  renderCart();
+}
+
+function checkout() {
+  cart = {};
+  updateCartCount();
+  showToast('🎉 Pedido realizado com sucesso!');
+  showPage('cardapio');
+}
+
+async function addProduct() {
+  const nome = document.getElementById('newName').value.trim();
+  const descricao = document.getElementById('newDesc').value.trim();
+  const preco = parseFloat(document.getElementById('newPrice').value);
+
+  if (!nome || !preco) { showToast('⚠️ Preencha nome e preço!'); return; }
+
+  try {
+    const r = await fetch(`${API}/produtos`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nome, descricao, preco })
+    });
+    if (r.ok) {
+      const novo = await r.json();
+      products.push(novo);
+    } else {
+      // fallback local
+      products.push({ pid: Date.now(), nome, descricao, preco });
+    }
+  } catch {
+    products.push({ pid: Date.now(), nome, descricao, preco });
+  }
+
+  document.getElementById('newName').value = '';
+  document.getElementById('newDesc').value = '';
+  document.getElementById('newPrice').value = '';
+  renderCardapio();
+  renderAdminList();
+  showToast(`✅ ${nome} adicionado!`);
+}
+
+async function deleteProduct(pid) {
+  try {
+    await fetch(`${API}/produtos/${pid}`, { method: 'DELETE' });
+  } catch {}
+  products = products.filter(p => p.pid !== pid);
+  delete cart[pid];
+  updateCartCount();
+  renderCardapio();
+  renderAdminList();
+  showToast('🗑️ Produto removido!');
+}
+
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  const tabs = { cardapio: 0, carrinho: 1, admin: 2 };
+  document.querySelectorAll('.nav-tab')[tabs[name]].classList.add('active');
+  if (name === 'carrinho') renderCart();
+  if (name === 'admin') renderAdminList();
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+fetchProducts();
+</script>
+</body>
+</html>

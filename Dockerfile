@@ -1,0 +1,27 @@
+# -- Estágio 1: build ----------------------------------
+FROM ubuntu:22.04 AS builder
+RUN apt-get update && apt-get install -y python3 python3-pip
+WORKDIR /app
+COPY api/requirements.txt .
+RUN pip3 install --no-cache-dir -r requirements.txt
+
+# -- Estágio 2: produção -------------------------------
+FROM ubuntu:22.04
+RUN apt-get update && apt-get install -y python3 python3-pip && rm -rf /var/lib/apt/lists/*
+WORKDIR /app
+
+RUN adduser --disabled-password --gecos "" appuser
+
+# removed
+COPY api/requirements.txt .
+RUN pip3 install --no-cache-dir -r requirements.txt
+COPY api/ .
+
+USER appuser
+
+EXPOSE 8000
+
+HEALTHCHECK --interval=30s --timeout=5s \
+  CMD python3 -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"
+
+CMD ["python3", "-m", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
