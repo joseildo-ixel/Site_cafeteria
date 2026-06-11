@@ -1,6 +1,0 @@
-﻿services:
-  api:
-    build: .
-    image: cafeteria-api:local
-    ports:
-      - "8000:8000"
