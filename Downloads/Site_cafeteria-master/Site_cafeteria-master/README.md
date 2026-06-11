@@ -1,4 +1,4 @@
-﻿ Aroma & Grao - Cafeteria API
+﻿# Aroma & Grao - Cafeteria API
 
 Projeto integrador da disciplina **Gerenciamento de Configuracao de Software** do curso de Analise e Desenvolvimento de Sistemas (ADS) - IFPE.
 
@@ -10,7 +10,7 @@ Projeto integrador da disciplina **Gerenciamento de Configuracao de Software** d
 | Eduardo |
 | Eliabe |
 | Erik |
-| Luiz Felipe |
+| Luis Felipe |
 
 ---
 
@@ -22,9 +22,9 @@ Este projeto implementa uma **API REST** para gerenciamento de produtos de uma c
 
 ## Tecnologias Utilizadas
 
-- Python 3.12
+- Python 3.10
 - FastAPI
-- Pytest
+- Pytest (com pytest-html)
 - Docker
 - GitHub Actions
 - Docker Hub
@@ -44,9 +44,9 @@ flowchart LR
 
 | Job | Gatilho | O que faz |
 |-----|---------|-----------|
-| CI - Testes | Todo push e pull request | Instala dependencias e executa os testes automatizados com pytest |
-| Build | Apos CI passar | Constroi a imagem Docker para validar o Dockerfile |
-| CD | Push na branch master | Publica a imagem no Docker Hub |
+| CI - Testes | Todo push e pull request | Instala dependencias, executa os testes automatizados e gera relatório de resultados em HTML |
+| Build | Apos CI passar | Constroi a imagem Docker localmente para validar o Dockerfile |
+| CD | Push na branch master | Publica a imagem no Docker Hub com tags de versão e latest |
 
 ---
 
@@ -60,11 +60,11 @@ flowchart LR
 
 ```bash
 # Clone o repositorio
-git clone https://github.com/joseildo-ixel/Site_cafeteria.git
+git clone [https://github.com/joseildo-ixel/Site_cafeteria.git](https://github.com/joseildo-ixel/Site_cafeteria.git)
 cd Site_cafeteria
 
-# Suba a aplicacao
-docker compose up
+# Construa a imagem e suba a aplicacao localmente
+docker compose up --build
 ```
 
 A API ficara disponivel em: `http://localhost:8000`
@@ -78,6 +78,7 @@ Documentacao interativa: `http://localhost:8000/docs`
 ```bash
 # Instale as dependencias
 pip install -r api/requirements.txt
+pip install pytest pytest-html
 
 # Execute os testes
 python -m pytest api/testes/ -v
@@ -100,7 +101,7 @@ python -m pytest api/testes/ -v
 
 ## Imagem Docker
 
-A imagem e publicada automaticamente no Docker Hub a cada push na branch `master`:
+A imagem e publicada automaticamente no Docker Hub a cada push na branch `master` (ou `main`):
 
 ```bash
 docker pull joseildosystem/cafeteria-api:latest
@@ -112,6 +113,8 @@ docker pull joseildosystem/cafeteria-api:latest
 
 ![Pipeline CI/CD](docs/pipeline.png)
 
+*(Nota: Certifique-se de atualizar o arquivo docs/pipeline.png com um print da nova pipeline passando verde no GitHub Actions!)*
+
 ---
 
 ## Estrategia de Branches (GitFlow)
@@ -122,4 +125,3 @@ docker pull joseildosystem/cafeteria-api:latest
 | `develop` | Integracao das funcionalidades |
 | `feature/*` | Novas funcionalidades |
 | `release/*` | Preparacao para lancamento |
-
