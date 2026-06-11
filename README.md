@@ -1,4 +1,4 @@
-﻿# Aroma & Grao - Cafeteria API
+﻿ Aroma & Grao - Cafeteria API
 
 Projeto integrador da disciplina **Gerenciamento de Configuracao de Software** do curso de Analise e Desenvolvimento de Sistemas (ADS) - IFPE.
 
