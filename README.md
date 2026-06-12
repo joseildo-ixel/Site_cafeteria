@@ -1,6 +1,6 @@
 ﻿# Aroma & Grao - Cafeteria API
 
-Projeto integrador da disciplina **Gerenciamento de Configuracao de Software** do curso de Analise e Desenvolvimento de Sistemas (ADS) - IFPE.
+Projeto integrador da disciplina **Gerenciamento de Configuração de Software** do curso de Analise e Desenvolvimento de Sistemas (ADS) - IFPE.
 
 ## Equipe
 
@@ -11,10 +11,12 @@ Projeto integrador da disciplina **Gerenciamento de Configuracao de Software** d
 | Eliabe Rafael|
 | Erik Jerônimo|
 | Luis Felipe |
+| Romero Galindo |
+| Algusto |
 
 ---
 
-## Descricao do Projeto
+## Descrição do Projeto
 
 Este projeto implementa uma **API REST** para gerenciamento de produtos de uma cafeteria ficticia chamada **Aroma & Grao**, com um pipeline CI/CD completo utilizando **GitHub Actions** e **Docker**.
 
@@ -40,7 +42,7 @@ flowchart LR
     C --> D[CD - Publicar no Docker Hub]
 ```
 
-### Descricao dos Jobs
+### Descrição dos Jobs
 
 | Job | Gatilho | O que faz |
 |-----|---------|-----------|
