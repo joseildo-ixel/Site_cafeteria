@@ -111,7 +111,7 @@ docker pull joseildosystem/cafeteria-api:latest
 
 ---
 
-## Evidencias de Execucao
+## Evidencias de Execução
 
 ![Pipeline CI/CD](docs/pipeline.png)
 
