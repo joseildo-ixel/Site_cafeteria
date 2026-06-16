@@ -7,8 +7,8 @@ Projeto integrador da disciplina **Gerenciamento de Configuração de Software**
 | Nome |
 |------|
 | Joseildo dos Santos|
-| Eduardo Arthur|
 | Eliabe Rafael|
+| Eduardo Artur|
 | Erik Jerônimo|
 | Luis Felipe |
 | Romero Galindo |
