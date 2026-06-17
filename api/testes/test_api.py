@@ -19,7 +19,7 @@ def test_criar_produto():
     assert r.status_code == 201
     assert r.json()['nome'] == 'Cafe Expresso'
 
-
+#ERROR 404 EM HTTPS
 def test_ler_produto_existente():
     r = client.post('/produtos', json={'nome': 'Bolo de Chocolate', 'preco': 8.0})
     pid = r.json()['id']
